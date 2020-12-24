@@ -1,0 +1,102 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Person;
+use Illuminate\Http\Request;
+
+class PersonController extends Controller
+{
+    /**params[:per_page]
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index(Request $request)
+    {
+        $neededPersons = Person::all()->take($request->per_page);
+        //$neededPersons = Person::paginate($request->per_page);
+        return response()->json([
+            'meta'=>[
+                "total" => 50
+            ],
+            'links' => '23hf32rfh32r',
+            'data' => $neededPersons
+          ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('persons.create');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Person  $person
+     * @return \Illuminate\Http\Response
+     */
+    public function show(Person $person)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Person  $person
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Person $person)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Person  $person
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, Person $person)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Person  $person
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Person $person, $id)
+    {
+        $person = Person::find($id);
+        if(!isset($person)) {
+            return response(['message' => "Not found"], 404);
+        }
+        else {
+            $person->delete();
+            return response()->json([
+                'data' => $person
+              ]);
+        }
+    }
+}
