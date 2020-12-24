@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Person;
 use Illuminate\Http\Request;
-
+use App\Http\Resources\PersonCollection;
 class PersonController extends Controller
 {
     /**params[:per_page]
@@ -14,15 +14,8 @@ class PersonController extends Controller
      */
     public function index(Request $request)
     {
-        $neededPersons = Person::all()->take($request->per_page);
-        //$neededPersons = Person::paginate($request->per_page);
-        return response()->json([
-            'meta'=>[
-                "total" => 50
-            ],
-            'links' => '23hf32rfh32r',
-            'data' => $neededPersons
-          ]);
+        $paginated = Person::select()->paginate($request->per_page);
+        return response()->json(new PersonCollection($paginated));
     }
 
     /**
